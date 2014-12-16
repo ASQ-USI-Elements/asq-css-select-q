@@ -71,9 +71,9 @@
 
   }
   
-  Polymer.mixin2(p, ASQ.ElementTypeMixin);
-  Polymer.mixin2(p, ASQ.RoleMixin);
-  Polymer.mixin2(p, ASQ.QuestionTypeMixin);
+  ASQ.mixin2(p, ASQ.ElementTypeMixin);
+  ASQ.mixin2(p, ASQ.RoleMixin);
+  ASQ.mixin2(p, ASQ.QuestionTypeMixin);
   Polymer('asq-css-select', p);
 
 })();
