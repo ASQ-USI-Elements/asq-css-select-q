@@ -5,7 +5,7 @@
     isQuestion_: true,
     type_: "asq-css-select",
 
-    getSubmission: function() {
+    submit: function() {
       if ( this.role !== this.Roles.VIEWER ) {
         return;
       }
