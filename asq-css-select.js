@@ -14,12 +14,12 @@
         this.value = "";
       }
 
-      submisstion = this.value.replace(/[\s]+/g, " ").trim();
+      submission = this.value.replace(/[\s]+/g, " ").trim();
       
       return {
         questionId: "",
         timestamp: new Date(),
-        submisstion: submisstion
+        submission: submission
       };
     },
 
