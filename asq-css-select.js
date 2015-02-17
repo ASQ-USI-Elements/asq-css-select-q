@@ -2,11 +2,11 @@
 
   var p = {
 
-    isQuestion_: true,
-    type_: "asq-css-select",
+    isASQQuestionTypeElement: true,
+    type: "asq-css-select",
 
     submit: function() {
-      if ( this.role !== this.Roles.VIEWER ) {
+      if ( this.role !== this.roles.VIEWER ) {
         return;
       }
 
@@ -71,9 +71,7 @@
 
   }
   
-
-  ASQ.mixin2(p, ASQ.RoleMixin);
-  Polymer.mixin(p, ASQ.ElementTypeMixin, ASQ.QuestionTypeMixin);
+  ASQ.asqify(p, true);
   Polymer('asq-css-select', p);
 
 })();
