@@ -3,7 +3,15 @@
   var p = {
 
     isASQQuestionTypeElement: true,
-    type: "asq-css-select",
+
+    /**
+     * This html code that the students will play with.
+     *
+     * @attribute type
+     * @type string
+     * @default 'n'
+     */
+    htmlcode: "",
 
     submit: function() {
       if ( this.role !== this.roles.VIEWER ) {

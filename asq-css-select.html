@@ -1,7 +1,20 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../asq-base/asq-base.html">
 
+<!--
+`asq-css-select` is a qustion that allows students to practice with css selectors.
 
+##### Example
+    <asq-css-select htmlcode="<ul><li class='daclass'><ul id='ghouan'><li></li><li></li><li></li></ul></li><li></li><li></li><li><div><p></p><p class='pclass'></p></div></li></ul>">
+        <asq-stem><h3>Select 'div' elements:</h3><asq-stem>
+    </asq-css-select>
+
+
+@element asq-css-select
+@group ASQ Elements
+@blurb Element acting as options in multichoice questions.
+@homepage http://github.com/ASQ_USI/asq-css-select
+-->
 <polymer-element name="asq-css-select" attributes="htmlcode">
   <template>
     <style>
