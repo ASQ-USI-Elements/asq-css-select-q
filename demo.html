@@ -3,7 +3,7 @@
 <head>
   <meta name="asq-css-select" content="width=device-width, initial-scale=1, user-scalable=no">
 
-  <title>ASQ | CSS Select</title>
+  <title>ASQ-CSS-SELECT | Demo</title>
 
   <script src="../webcomponentsjs/webcomponents.js"></script>
 
@@ -25,24 +25,34 @@
       padding: 14px;
       font-size: 16px;
     }
+
+    section {
+      max-width: 400px;
+    }
+
+    asq-css-select {
+      margin-bottom: 1em;
+    }
   </style>
 
 </head>
 <body>
 
-<template is="auto-binding">
-
   <section>
 
-    <asq-css-select htmlcode="<ul><li class='daclass'><ul id='ghouan'><li></li><li></li><li></li></ul></li><li></li><li></li><li><div><p></p><p class='pclass'></p></div></li></ul>">
-        <asq-stem><h3>Select 'div' elements:</h3></asq-stem>
+    <asq-css-select htmlcode="<ul><li class='aclass'><ul id='aid'><li></li><li></li></ul></li><div><p></p><p class='bclass'></p></div></li></ul>">
+      <asq-stem><h3>Select 'div' elements:</h3></asq-stem>
+    </asq-css-select>
+
+
+    <asq-css-select placeholder="please use class selecor" htmlcode="<ul><li class='aclass'><ul id='aid'><li></li><li></li></ul></li><div><p></p><p class='bclass'></p></div></li></ul>">
+      <asq-stem><h3>An example of custom placeholder</h3></asq-stem>
     </asq-css-select>
 
   </section>
 
-
-
-</template>
-
+  <script>
+    var x = document.querySelector('asq-css-select');
+  </script>
 </body>
 </html>
