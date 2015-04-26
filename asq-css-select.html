@@ -1,53 +1,230 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../asq-base/asq-base.html">
+<link rel="import" href="../paper-input/paper-input.html">
 
 <!--
-`asq-css-select` is a qustion that allows students to practice with css selectors.
+`asq-css-select` is a qustion that allows students to practice with css selectors. The attribute *htmlcode* is used to set the piece of html code.
 
 ##### Example
-    <asq-css-select htmlcode="<ul><li class='daclass'><ul id='ghouan'><li></li><li></li><li></li></ul></li><li></li><li></li><li><div><p></p><p class='pclass'></p></div></li></ul>">
-        <asq-stem><h3>Select 'div' elements:</h3><asq-stem>
+    <asq-css-select htmlcode="<ul><li class='aclass'><ul id='aid'><li></li><li></li></ul></li><div><p></p><p class='bclass'></p></div></li></ul>">
+      <asq-stem><h3>Select 'div' elements:</h3></asq-stem>
     </asq-css-select>
 
 
 @element asq-css-select
 @group ASQ Elements
 @blurb Element acting as options in multichoice questions.
-@homepage http://github.com/ASQ_USI/asq-css-select
+@homepage http://github.com/ASQ-USI/asq-css-select
 -->
-<polymer-element name="asq-css-select" attributes="htmlcode">
+<polymer-element name="asq-css-select">
   <template>
     <style>
 
-      #asq_css {
-        width: 100%;
-        height: 100%;
+      :host {
         display: block;
       }
 
       #code {
-        width: 100%;
-        height: 100%;
         background: #272822;
         color: #FCFCFC;
-        display: block;
       }
-      #input {
-        margin-top: 1em;
-        margin-bottom: 1em;
-      }
+    
     </style>
 
-    <div id="asq_css">
-      <content select="asq-stem"></content>
-      <div id="code" data-scroll="y">
-        <pre data-scroll="y"><code id="codePane" data-scroll="y"></code></pre> 
-      </div> 
-      <div id="input">
-        <label>Selector: </label><input type="text" id="sel_input" value="{{value}}" on-input="{{input}}">
-      </div> 
-    </div>
+    <content select="asq-stem"></content>
+
+    <pre id="code" data-scroll="y"><code id="codePane" data-scroll="y"></code></pre>
+
+    <label>{{label}}</label> 
+    <paper-input id="input" label="{{placeholder}}" value="{{value}}" disabled="{{disabled}}"></paper-input>
   </template>
-  <script src="./asq-css-select.js"></script>
+  <script>
+    (function() {
+
+      var p = {
+
+        publish: {
+          /**
+           * This html code that would display inside question.
+           *
+           * @attribute htmlcode
+           * @type string
+           * @default ''
+           */
+          htmlcode: '',
+
+          /**
+           * Set to true to disable the element.
+           *
+           * @attribute disabled
+           * @type boolean
+           * @default false
+           */
+          disabled: {value: false, reflect: true},
+
+          /**
+           * The current value of the input.
+           * 
+           * @attribute value
+           * @type string
+           * @default ''
+           */
+          value: {value: '', reflect: true},
+
+          /**
+           * The label for this input. It normally appears as grey text inside
+           * the text input and disappears once the user enters text.
+           *
+           * @attribute label
+           * @type string
+           * @default ''
+           */
+          label: 'Selector: ',
+
+          /**
+           * The placeholder of the input.
+           * 
+           * @attribute placeholder
+           * @type string
+           * @default ''
+           */
+          placeholder: 'CSS selector',
+
+        },
+
+        vDOM: null,
+        
+        htmlcodeChanged: function() {
+          this.vDOM = document.createElement('div');
+          this.vDOM.innerHTML = this.htmlcode;
+          this.$.codePane.innerHTML = this.createTree(this.vDOM, '', '');
+        },
+
+        valueChanged: function() {
+          
+          var value = this.$.input.value;
+          var clone = this.vDOM.cloneNode(true);
+          try {
+            var selected = clone.querySelectorAll(value);
+            selected.array().forEach(function(elem, index) {
+                elem.setAttribute('data-asq-selected', 'true');
+            });
+            var codeTree = this.createTree(clone, '', '');
+            this.$.codePane.innerHTML = codeTree;
+          } catch (err) {
+            this.cleanUp(clone);
+            var codeTree = this.createTree(clone, '', '');
+            this.$.codePane.innerHTML = codeTree;
+          }     
+        },
+
+        // Remove all *'data-asq-selected'* attribute
+        cleanUp: function(clone) {
+          var selected = clone.querySelectorAll('[data-asq-selected]');
+          selected.array().forEach(function(elem, index) {
+              elem.removeAttribute('data-asq-selected');
+          });
+          return clone;
+        },
+
+        // recursive function that creates the escaped tree of the html
+        // annotated with spans
+        createTree: function(el, treeStr, tabwidth) {
+          var nextTabwidth = tabwidth || "";
+          el.childNodes.array().forEach(function(elem, index){
+
+            var spanOpenTag = '<span>';
+
+            if(elem.getAttribute('data-asq-selected') === 'true'){
+                spanOpenTag = '<span style="background-color:#fd2343;">';
+            }
+
+            treeStr += tabwidth + spanOpenTag;
+            treeStr += this.escapeHtml(this.getElOpeningTag(elem));
+            treeStr += '</span>'+ '\n';
+
+            //generate tree for children of current
+            nextTabwidth = tabwidth + '  ';
+            treeStr = this.createTree(elem, treeStr, nextTabwidth);
+
+            //back to current 
+            treeStr += tabwidth + spanOpenTag;
+            treeStr +=  this.escapeHtml('</' + elem.tagName.toLowerCase() + '>');
+            treeStr += '</span>'+ '\n';
+          }, this);
+              
+          return treeStr;
+        },
+
+        escapeHtml: function(string) {
+          var entityMap = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;',
+            "/": '&#x2F;'
+          };
+
+          return String(string).replace(/[&<>"'\/]/g, function (s) {
+            return entityMap[s];
+          });
+        }, 
+
+        getElOpeningTag: function(el){
+          var str ="<";
+          str += el.tagName.toLowerCase();
+          
+          //get all attribures
+          el.attributes.array().forEach(function(elem) {
+          // this.attributes is not a plain object, but an array
+          // of attribute nodes, which contain both the name and value
+            if(elem.specified && elem.name !=='data-asq-selected' ) {
+              str += ' ' + elem.name;
+              str += '="' + elem.value + '"';
+            }
+          });
+          str += '>';
+          return str;
+        },
+
+        /**
+         * The `submit` method returns an object that respresents the submission of this question. The object has the following structure:
+
+             {
+                questionUid: this.uid, 
+                timestamp: new Date(),
+                submission: [] 
+             }
+         * Only enabled when the `role` of the element is <b>viewer</b>.
+         *
+         * @method submit
+         */
+        submit: function() {
+          if ( this.role !== this.roles.VIEWER ) {
+            return;
+          }
+
+          if ( !this.value ) {
+            this.value = '';
+          }
+
+          submission = this.value.replace(/[\s]+/g, ' ').trim();
+          
+          return {
+            questionId: '',
+            timestamp: new Date(),
+            submission: submission
+          };
+        },
+
+      }
+      
+      ASQ.asqify(p, true);
+      Polymer('asq-css-select', p);
+
+    })();
+
+  </script>
   
 </polymer-element>
