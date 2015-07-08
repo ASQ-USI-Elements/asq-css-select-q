@@ -3,20 +3,20 @@
 <link rel="import" href="../paper-input/paper-input.html">
 
 <!--
-`asq-css-select` is a qustion that allows students to practice with css selectors. The attribute *htmlcode* is used to set the piece of html code.
+`asq-css-select-q` is a qustion that allows students to practice with css selectors. The attribute *htmlcode* is used to set the piece of html code.
 
 ##### Example
-    <asq-css-select htmlcode="<ul><li class='aclass'><ul id='aid'><li></li><li></li></ul></li><div><p></p><p class='bclass'></p></div></li></ul>">
+    <asq-css-select-q htmlcode="<ul><li class='aclass'><ul id='aid'><li></li><li></li></ul></li><div><p></p><p class='bclass'></p></div></li></ul>">
       <asq-stem><h3>Select 'div' elements:</h3></asq-stem>
-    </asq-css-select>
+    </asq-css-select-q>
 
 
-@element asq-css-select
+@element asq-css-select-q
 @group ASQ Elements
 @blurb Element acting as options in multichoice questions.
-@homepage http://github.com/ASQ-USI/asq-css-select
+@homepage http://github.com/ASQ-USI/asq-css-select-q
 -->
-<polymer-element name="asq-css-select">
+<polymer-element name="asq-css-select-q">
   <template>
     <style>
 
@@ -107,7 +107,7 @@
         onQuestionType: function(evt){
           if(!evt || ! evt.questionType) return;
 
-          if(evt.questionType == 'asq-css-select'){
+          if(evt.questionType == 'asq-css-select-q'){
             if(evt.type == "restorePresenter"){
               if(this.role !== this.roles.PRESENTER) return;
               this.onRestorePresenter(evt);
@@ -261,7 +261,7 @@
       }
       
       ASQ.asqify(p, true);
-      Polymer('asq-css-select', p);
+      Polymer('asq-css-select-q', p);
 
     })();
 

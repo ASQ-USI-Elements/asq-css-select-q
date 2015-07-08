@@ -1,7 +1,7 @@
 {
-  "name": "asq-css-select",
+  "name": "asq-css-select-q",
   "version": "0.0.0",
-  "homepage": "https://github.com/ASQ-USI/asq-css-select",
+  "homepage": "https://github.com/ASQ-USI-Elements/asq-css-select-q",
   "authors": [
     "Vasileios Triglianos <triglian@gmail.com>",
     "Zhenfei Nie <zhenfei.nie@gmail.com>"
@@ -13,7 +13,8 @@
   "license": "MIT",
   "dependencies": {
     "polymer": "Polymer/polymer#^0.5.1",
-    "asq-base": "ASQ-USI/asq-base#master"
+    "paper-input": "Polymer/paper-input#^0.5.2",
+    "asq-base": "ASQ-USI-Elements/asq-base#master"
   },
   "ignore": [ "index.js", "lib", "package.json", "node_modules", ".npmignore", "test/server"],
   "devDependencies": {

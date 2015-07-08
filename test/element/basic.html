@@ -3,25 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="asq" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-  <title>asq-css-select</title>
+  <title>asq-css-select-q</title>
 
   <script src="../../../webcomponentsjs/webcomponents.min.js"></script>
   <script src="../../../web-component-tester/browser.js"></script>
 
   <!-- Step 1: import the element to test -->
-  <link rel="import" href="../../asq-css-select.html">
+  <link rel="import" href="../../asq-css-select-q.html">
   <link rel="import" href="../../../asq-base/asq-base.html">
 </head>
 <body>
 
   <!-- You use the document as a place to set up your fixtures. -->
-  <asq-css-select id="m" htmlcode="<ul><li class='daclass'><ul id='ghouan'><li></li><li></li><li></li></ul></li><li></li><li></li><li><div><p></p><p class='pclass'></p></div></li></ul>">
+  <asq-css-select-q id="m" htmlcode="<ul><li class='daclass'><ul id='ghouan'><li></li><li></li><li></li></ul></li><li></li><li></li><li><div><p></p><p class='pclass'></p></div></li></ul>">
         <asq-stem><h3>Select 'div' elements:</h3><asq-stem>
-    </asq-css-select>
+    </asq-css-select-q>
 
   <script>
     var m = document.querySelector('#m');
-    suite('<asq-css-select>', function() {
+    suite('<asq-css-select-q>', function() {
       test('test default values', function() {
         assert.equal(m.htmlcode, "<ul><li class='daclass'><ul id='ghouan'><li></li><li></li><li></li></ul></li><li></li><li></li><li><div><p></p><p class='pclass'></p></div></li></ul>");
       });

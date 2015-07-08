@@ -20,7 +20,7 @@ describe("asqCssSelectPlugin.js", function(){
       then: then
     });
 
-    this.tagName = "asq-css-select";
+    this.tagName = "asq-css-select-q";
 
     this.asq = {
       registerHook: function(){},
@@ -57,7 +57,7 @@ describe("asqCssSelectPlugin.js", function(){
       this.asqCssSelectPlugin.prototype.processEl.restore();
     });
 
-    it("should call processEl() for all asq-css-select elements", function(done){
+    it("should call processEl() for all asq-css-select-q elements", function(done){
       this.asqcs.parseHtml(this.simpleHtml)
       .then(function(){
         this.asqcs.processEl.calledTwice.should.equal(true);
