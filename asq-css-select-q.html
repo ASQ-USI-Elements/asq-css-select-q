@@ -13,6 +13,7 @@
 
 @element asq-css-select-q
 @group ASQ Elements
+@demo demo/index.html
 @blurb Element acting as options in multichoice questions.
 @homepage http://github.com/ASQ-USI-Elements/asq-css-select-q
 -->
@@ -114,8 +115,8 @@
           var value = this.$.input.value;
           var clone = this.vDOM.cloneNode(true);
           try {
-            var selected = clone.querySelectorAll(value);
-            selected.array().forEach(function (elem, index) {
+            var selected = Polymer.dom(clone).querySelectorAll(value);
+            selected.forEach(function (elem, index) {
               elem.setAttribute('data-asq-selected', 'true');
             });
             var codeTree = this.createTree(clone, '', '');
@@ -128,8 +129,8 @@
         },
         // Remove all *'data-asq-selected'* attribute
         cleanUp: function (clone) {
-          var selected = clone.querySelectorAll('[data-asq-selected]');
-          selected.array().forEach(function (elem, index) {
+          var selected = Polymer.dom(clone).querySelectorAll('[data-asq-selected]');
+          selected.forEach(function (elem, index) {
             elem.removeAttribute('data-asq-selected');
           });
           return clone;
@@ -138,7 +139,7 @@
         // annotated with spans
         createTree: function (el, treeStr, tabwidth) {
           var nextTabwidth = tabwidth || '';
-          el.childNodes.array().forEach(function (elem, index) {
+          Polymer.dom(el).childNodes.forEach(function (elem, index) {
             var spanOpenTag = '<span>';
             if (elem.getAttribute('data-asq-selected') === 'true') {
               spanOpenTag = '<span style="background-color:#fd2343;">';
@@ -173,7 +174,7 @@
           var str = '<';
           str += el.tagName.toLowerCase();
           //get all attribures
-          el.attributes.array().forEach(function (elem) {
+          [].forEach.call(el.attributes, function (elem) {
             // this.attributes is not a plain object, but an array
             // of attribute nodes, which contain both the name and value
             if (elem.specified && elem.name !== 'data-asq-selected') {
