@@ -37,7 +37,26 @@
 
     <label>{{label}}</label> 
     <paper-input id="input" label="{{placeholder}}" value="{{value}}" disabled="{{disabled}}"></paper-input>
+
+    <!-- Viewer -->
+    <template is="dom-if" if="{{hasRole(role, roles.VIEWER)}}" restamp="true">
+      <asq-css-select-viewer-q role="viewer" uid="[[uid]]"
+      htmlcode="{{htmlcode}}" disabled="{{disabled}}"
+      value="{{value}}" event-bus="[[eventBus]]">
+        <content></content>
+      </asq-css-select-viewer-q>
+    </template>
+
+    <!-- Presenter -->
+   <template is="dom-if" if="{{hasRole(role, roles.PRESENTER)}}" restamp="true">
+      <asq-css-select-presenter-q role="presenter" uid="[[uid]]" htmlcode="{{htmlcode}}" disabled="{{disabled}}"
+      value="{{value}}" event-bus="[[eventBus]]">
+        <content></content>
+      </asq-css-select-presenter-q>
+    </template>
+
   </template>
+
   <script>
     (function () {
       Polymer({
