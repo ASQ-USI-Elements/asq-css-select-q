@@ -42,6 +42,9 @@
     (function () {
       Polymer({
         is: 'asq-css-select-q',
+
+        behaviors: [ASQ.asqQuestionElementBehavior],
+
         properties: {
           htmlcode: { observer: 'htmlcodeChanged' },
           vDOM: { value: null },
