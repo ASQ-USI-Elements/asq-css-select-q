@@ -32,8 +32,6 @@
 
     <content></content>
 
-    
-
     <div id="container">
       <div id="main">
         <pre id="code" data-scroll="y"><code id="codePane" data-scroll="y"></code></pre>
@@ -44,7 +42,7 @@
         <p>Submissions</p>
         <iron-list id="submissionList" items="[[_submissions]]" as="submission" selection-enabled selected-item="{{_selectedSubmissionItem}}">
           <template>
-            <paper-item>#<span>[[index]]</span>&nbsp;&nbsp;<span>[[submission.submission.html]]</span>
+            <paper-item>#<span>[[index]]</span>&nbsp;&nbsp;<span>[[submission.submission]]</span>
             </paper-item>
           </template>
         </iron-list>

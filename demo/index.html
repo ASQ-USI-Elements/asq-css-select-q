@@ -18,35 +18,15 @@
       -webkit-tap-highlight-color: rgba(0,0,0,0);
       -webkit-touch-callout: none;
     }
-    section {
-      padding: 20px 0;
-    }
-    section > div {
-      padding: 14px;
-      font-size: 16px;
-    }
 
-    section {
-      max-width: 400px;
-    }
-
-    asq-css-select-q {
-      margin-bottom: 1em;
-    }
   </style>
 
 </head>
 <body>
 
-  <section>
-
-    <asq-css-select-q role="presenter" htmlcode="<ul><li class='aclass'><ul id='aid'><li></li><li></li></ul></li><div><p></p><p class='bclass'></p></div></li></ul>">
-      <asq-stem><h3>Select 'div' elements:</h3></asq-stem>
-    </asq-css-select-q>
-
-
-
-  </section>
+  <asq-css-select-q role="presenter" htmlcode="<ul><li class='aclass'><ul id='aid'><li></li><li></li></ul></li><div><p></p><p class='bclass'></p></div></li></ul>">
+    <asq-stem><h3>Select 'div' elements:</h3></asq-stem>
+  </asq-css-select-q>
 
   <script>
     var x = document.querySelector('asq-css-select-q');
