@@ -1,19 +1,25 @@
 <link rel="import" href="../../../polymer/polymer.html">
 <link rel="import" href="../../../asq-base/asq-base.html">
-<link rel="import" href="../../../paper-input/paper-input.html">
-<link rel="import" href="../../../paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../../../iron-pages/iron-pages.html">
-<link rel="import" href="../../../paper-drawer-panel/paper-drawer-panel.html">
 <link rel="import" href="../../../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../../../iron-icons/iron-icons.html">
 <link rel="import" href="../../../iron-list/iron-list.html">
+<link rel="import" href="../../../iron-pages/iron-pages.html">
+<link rel="import" href="../../../paper-drawer-panel/paper-drawer-panel.html">
+<link rel="import" href="../../../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../../paper-input/paper-input.html">
+<link rel="import" href="../../../paper-item/paper-item.html">
+<link rel="import" href="../../../paper-tabs/paper-tab.html">
+<link rel="import" href="../../../paper-tabs/paper-tabs.html">
 
 
 <dom-module id="asq-css-select-q-presenter">
   
   <template>
     <style>
-
+      
+      :host{
+        --paper-tabs-selection-bar-color: #333;
+      }
 
       #code {
         background: #272822;
@@ -24,8 +30,32 @@
         @apply(--layout-horizontal);
       }
 
-      #container div {
+      #main{
+        @apply(--layout-flex-3);
+        @apply(--asq-css-select-q-main);
+      }
+
+      #list-container{
        @apply(--layout-flex);
+       @apply(--layout-vertical);
+      }
+
+      #list-container iron-pages{
+       @apply(--layout-flex);
+       @apply(--layout-vertical);
+      }
+
+      #submissionList {
+        @apply(--layout-flex-1);
+      }
+
+      #submissionList paper-item{
+        overflow:hidden;
+        padding: 12px 5px 0;
+        background-color: white;
+        cursor: pointer;
+        font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+        @apply(--shadow-elevation-2dp);
       }
 
     </style>
@@ -38,15 +68,22 @@
         <paper-input id="input" label="{{placeholder}}" value="{{value}}" disabled="{{disabled}}"></paper-input>
       </div>
 
-      <div>
-        <p>Submissions</p>
-        <iron-list id="submissionList" items="[[_submissions]]" as="submission" selection-enabled selected-item="{{_selectedSubmissionItem}}">
-          <template>
-            <paper-item>#<span>[[index]]</span>&nbsp;&nbsp;<span>[[submission.submission]]</span>
-            </paper-item>
-          </template>
-        </iron-list>
+      <div id="list-container">
+        <paper-tabs selected="{{_selectedTab}}" selected="0" selected-attribute="active" noink role="tablist">     
+          <paper-tab role="tab"></paper-tab>
+          <paper-tab role="tab">Submissions</paper-tab>            
+        </paper-tabs>
+        <iron-pages selected="{{_selectedTab}}">
+          <div></div>
+          <iron-list id="submissionList" items="[[_submissions]]" as="submission" selection-enabled selected-item="{{_selectedSubmissionItem}}">
+            <template>
+              <paper-item>#<span>[[index]]</span>&nbsp;&nbsp;<span>[[submission.submission]]</span>
+              </paper-item>
+            </template>
+          </iron-list>
+        </iron-pages> 
       </div>
+
     </div>
 
   </template>
