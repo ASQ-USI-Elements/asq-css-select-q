@@ -96,6 +96,13 @@ Polymer({
   behaviors: [ASQ.asqQuestionElementBehavior],
 
   properties: {
+    /**
+     * This html code that would display inside question.
+     *
+     * @attribute htmlcode
+     * @type string
+     * @default ''
+     */
     htmlcode: { 
       type: String,
       value: '',
@@ -106,6 +113,13 @@ Polymer({
       value: null 
     },
 
+    /**
+     * Get or set the current input value.
+     * 
+     * @attribute value
+     * @type string
+     * @default ''
+     */
     value: { 
       observer: '_valueChanged' 
     },
@@ -124,7 +138,15 @@ Polymer({
       notify: true
     },
 
-    label: {
+    /**
+     * The label for this input. It normally appears as grey text inside
+     * the text input and disappears once the user enters text.
+     *
+     * @attribute label
+     * @type string
+     * @default ''
+     */
+  label: {
       type: String,
       value: 'selector'
     }

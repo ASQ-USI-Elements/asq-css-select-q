@@ -4,6 +4,20 @@
 <link rel="import" href="elements/asq-css-select-q-viewer/asq-css-select-q-viewer.html">
 <link rel="import" href="elements/asq-css-select-q-presenter/asq-css-select-q-presenter.html">
 
+<!--
+`asq-css-select-q` is a qustion that allows students to practice with css selectors. The attribute *htmlcode* is used to set the piece of html code.
+##### Example
+
+    <asq-css-select-q role="viewer" htmlcode="<ul><li class='aclass'><ul id='aid'><li></li><li></li></ul></li><div><p></p><p class='bclass'></p></div></li></ul>">
+      <asq-stem><h3>Select all 'li' elements:</h3></asq-stem>
+    </asq-css-select-q>
+
+@element asq-css-select-q
+@demo demo/index.html
+@group ASQ Elements
+@blurb Element acting as options in multichoice questions.
+@homepage http://github.com/ASQ-USI-Elements/asq-css-select-q
+-->
 <dom-module id="asq-css-select-q">
 
   <template>
@@ -46,6 +60,44 @@
         eventBus: {
           type: Object,
           notify: true
+        },
+
+        /**
+         * This html code that would display inside question.
+         *
+         * @attribute htmlcode
+         * @type string
+         * @default ''
+         */
+        htmlcode: { 
+          type: String,
+          value: ''
+        },
+
+
+        /**
+         * Get or set the current input value.
+         * 
+         * @attribute value
+         * @type string
+         * @default ''
+         */
+        value: { 
+          type: String,
+          value: ''
+        },
+
+        /**
+         * The label for this input. It normally appears as grey text inside
+         * the text input and disappears once the user enters text.
+         *
+         * @attribute label
+         * @type string
+         * @default ''
+         */
+        label: {
+          type: String,
+          value: 'selector'
         }
       },
 
