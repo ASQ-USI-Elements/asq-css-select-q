@@ -54,6 +54,14 @@
       behaviors: [ASQ.asqQuestionElementBehavior],
 
       properties: {
+
+        disabled: { 
+          type: Boolean,
+          value: false,
+          notify: true, 
+          reflectToAttribute: true
+        },
+
         /**
          * Event bus to communicate with ASQ
          */

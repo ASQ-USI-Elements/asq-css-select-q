@@ -96,6 +96,12 @@ Polymer({
   behaviors: [ASQ.asqQuestionElementBehavior],
 
   properties: {
+    disabled: { 
+      type: Boolean,
+      value: false,
+      notify: true, 
+      reflectToAttribute: true
+    },
     /**
      * This html code that would display inside question.
      *
