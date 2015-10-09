@@ -4,6 +4,24 @@
 <link rel="import" href="elements/asq-css-select-q-viewer/asq-css-select-q-viewer.html">
 <link rel="import" href="elements/asq-css-select-q-presenter/asq-css-select-q-presenter.html">
 
+
+<!--
+`asq-css-select-q` is aimed at teaching selectors to students. The way it works is by passing a string containing the html tree (without breaks, it will be visually represented by showing one tag at each line) and allowing students to write selectors and visually inspect the resulting selection.
+
+
+Examples:
+    
+    <asq-css-select-q role="viewer" htmlcode="<ul><li class='aclass'><ul id='aid'><li></li><li></li></ul></li><div><p></p><p class='bclass'></p></div></li></ul>">
+      <asq-stem><h3>Select all 'li' elements:</h3></asq-stem>
+    </asq-css-select-q>
+
+
+@element asq-asq-css-select-q
+@demo demo/index.html
+@group ASQ Elements
+@blurb ASQ buckets questions.
+@homepage http://github.com/ASQ-USI-Elements/asq-css-select-q
+-->
 <dom-module id="asq-css-select-q">
 
   <template>
@@ -41,7 +59,16 @@
 
       properties: {
         /**
-         * Event bus to communicate with ASQ
+         * A string with html code that will be converted to a 'DOM' tree the selectors are going to be applied on.
+         */
+        htmlcode: {
+          type: String,
+          value: '',
+          notify: true
+        },
+
+        /**
+         * Event bus to communicate with ASQ.
          */
         eventBus: {
           type: Object,
