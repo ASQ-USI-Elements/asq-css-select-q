@@ -8,6 +8,8 @@
 <!--
 `asq-css-select-q` is aimed at teaching selectors to students. The way it works is by passing a string containing the html tree (without breaks, it will be visually represented by showing one tag at each line) and allowing students to write selectors and visually inspect the resulting selection.
 
+`asq-css-select-q` is a qustion that allows students to practice with css selectors. The attribute *htmlcode* is used to set the piece of html code.
+##### Example
 
 Examples:
     
@@ -58,13 +60,12 @@ Examples:
       behaviors: [ASQ.asqQuestionElementBehavior],
 
       properties: {
-        /**
-         * A string with html code that will be converted to a 'DOM' tree the selectors are going to be applied on.
-         */
-        htmlcode: {
-          type: String,
-          value: '',
-          notify: true
+
+        disabled: { 
+          type: Boolean,
+          value: false,
+          notify: true, 
+          reflectToAttribute: true
         },
 
         /**
@@ -73,6 +74,33 @@ Examples:
         eventBus: {
           type: Object,
           notify: true
+        },
+
+        /**
+         * A string with html code that will be converted to a 'DOM' tree the selectors are going to be applied on..
+         */
+        htmlcode: { 
+          type: String,
+          value: '',
+          notify: true
+        },
+
+
+        /**
+         * Get or set the current input value.
+         */
+        value: { 
+          type: String,
+          value: ''
+        },
+
+        /**
+         * The label for this input. It normally appears as grey text inside
+         * the text input and disappears once the user enters text.
+         */
+        label: {
+          type: String,
+          value: 'selector'
         }
       },
 
