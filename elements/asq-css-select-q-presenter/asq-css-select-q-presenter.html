@@ -1,0 +1,314 @@
+<link rel="import" href="../../../polymer/polymer.html">
+<link rel="import" href="../../../asq-base/asq-base.html">
+<link rel="import" href="../../../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../../iron-icons/iron-icons.html">
+<link rel="import" href="../../../iron-list/iron-list.html">
+<link rel="import" href="../../../paper-drawer-panel/paper-drawer-panel.html">
+<link rel="import" href="../../../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../../paper-input/paper-input.html">
+<link rel="import" href="../../../paper-item/paper-item.html">
+<link rel="import" href="../../../paper-tabs/paper-tab.html">
+<link rel="import" href="../../../paper-tabs/paper-tabs.html">
+
+
+<dom-module id="asq-css-select-q-presenter">
+  
+  <template>
+    <style>
+      
+      :host{
+        --paper-tabs-selection-bar-color: #333;
+      }
+
+      #code {
+        background: #272822;
+        color: #FCFCFC;
+      }
+
+      #container{
+        @apply(--layout-horizontal);
+      }
+
+      #main{
+        @apply(--layout-flex-3);
+        @apply(--asq-css-select-q-main);
+      }
+
+      #list-container{
+       @apply(--layout-flex);
+       @apply(--layout-vertical);
+      }
+
+      #list-container iron-pages{
+       @apply(--layout-flex);
+       @apply(--layout-vertical);
+      }
+
+      #submissionListWrapper{
+        @apply(--layout-flex);
+        display: none;
+      }
+
+      #submissionList {
+        @apply(--layout-flex);
+      }
+
+      #submissionList paper-item{
+        overflow:hidden;
+        padding: 12px 5px 0;
+        background-color: white;
+        cursor: pointer;
+        font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+        @apply(--shadow-elevation-2dp);
+      }
+
+      #submissionList paper-item[focused]{
+        background-color: var(--google-grey-300);
+      }
+
+    </style>
+
+    <content></content>
+
+    <div id="container">
+      <div id="main">
+        <pre id="code" data-scroll="y"><code id="codePane" data-scroll="y"></code></pre>
+        <paper-input id="input" label="{{placeholder}}" value="{{value}}" disabled="{{disabled}}"></paper-input>
+      </div>
+
+      <div id="list-container">
+        <paper-tabs selected="{{_selectedTab}}" selected="0" selected-attribute="active" noink role="tablist">     
+          <paper-tab role="tab" on-click="toggleSubmissionList">Submissions</paper-tab>            
+        </paper-tabs>
+        <div id="submissionListWrapper" >
+          <iron-list id="submissionList" items="[[_submissions]]" as="submission" selection-enabled selected-item="{{_selectedSubmissionItem}}">
+            <template>
+              <paper-item>#<span>[[indexPlusOne(index)]]</span>&nbsp;&nbsp;<span>[[submission.submission]]</span>
+              </paper-item>
+            </template>
+          </iron-list>
+        </div> 
+      </div>
+
+    </div>
+
+  </template>
+</dom-module>
+
+<script>
+Polymer({
+  is: 'asq-css-select-q-presenter',
+
+  behaviors: [ASQ.asqQuestionElementBehavior],
+
+  properties: {
+    disabled: { 
+      type: Boolean,
+      value: false,
+      notify: true, 
+      reflectToAttribute: true
+    },
+    /**
+     * This html code that would display inside question.
+     *
+     * @attribute htmlcode
+     * @type string
+     * @default ''
+     */
+    htmlcode: { 
+      type: String,
+      value: '',
+      observer: '_htmlcodeChanged' 
+    },
+
+    vDOM: { 
+      value: null 
+    },
+
+    /**
+     * Get or set the current input value.
+     * 
+     * @attribute value
+     * @type string
+     * @default ''
+     */
+    value: { 
+      observer: '_valueChanged' 
+    },
+
+    eventBus: {
+      type: Object,
+      observer: "_eventBusChanged",
+      notify: true
+    },
+
+    _selectedSubmissionItem: {
+      observer: '_selectedSubmissionItemChanged'
+    },
+
+    _selectedTab:{
+      notify: true
+    },
+
+    /**
+     * The label for this input. It normally appears as grey text inside
+     * the text input and disappears once the user enters text.
+     *
+     * @attribute label
+     * @type string
+     * @default ''
+     */
+  label: {
+      type: String,
+      value: 'selector'
+    }
+  },
+
+  toggleSubmissionList: function(evt, detail){
+    var current = this.$.submissionListWrapper.style.display;
+    this.$.submissionListWrapper.style.display = (current == 'flex') ? 'none': 'flex';
+    this.$.submissionList._update();
+  },
+
+  _selectedSubmissionItemChanged: function(newItem, old){
+    if(! newItem) return;
+    this.value = newItem.submission;
+  },
+
+  _htmlcodeChanged: function () {
+    this.vDOM = document.createElement('div');
+    this.vDOM.innerHTML = this.htmlcode;
+    this.$.codePane.innerHTML = this._createTree(this.vDOM, '', '');
+  },
+
+  _valueChanged: function () {
+    var value = this.$.input.value;
+    var clone = this.vDOM.cloneNode(true);
+    try {
+      var selected = Polymer.dom(clone).querySelectorAll(value);
+      selected.forEach(function (elem, index) {
+        elem.setAttribute('data-asq-selected', 'true');
+      });
+      var codeTree = this._createTree(clone, '', '');
+      this.$.codePane.innerHTML = codeTree;
+    } catch (err) {
+      this._cleanUp(clone);
+      var codeTree = this._createTree(clone, '', '');
+      this.$.codePane.innerHTML = codeTree;
+    }
+  },
+  // Remove all *'data-asq-selected'* attribute
+  _cleanUp: function (clone) {
+    var selected = Polymer.dom(clone).querySelectorAll('[data-asq-selected]');
+    selected.forEach(function (elem, index) {
+      elem.removeAttribute('data-asq-selected');
+    });
+    return clone;
+  },
+  // recursive function that creates the escaped tree of the html
+  // annotated with spans
+  _createTree: function (el, treeStr, tabwidth) {
+    var nextTabwidth = tabwidth || '';
+    Polymer.dom(el).childNodes.forEach(function (elem, index) {
+      var spanOpenTag = '<span>';
+      if (elem.getAttribute('data-asq-selected') === 'true') {
+        spanOpenTag = '<span style="background-color:#fd2343;">';
+      }
+      treeStr += tabwidth + spanOpenTag;
+      treeStr += this._escapeHtml(this._getElOpeningTag(elem));
+      treeStr += '</span>' + '\n';
+      //generate tree for children of current
+      nextTabwidth = tabwidth + '  ';
+      treeStr = this._createTree(elem, treeStr, nextTabwidth);
+      //back to current 
+      treeStr += tabwidth + spanOpenTag;
+      treeStr += this._escapeHtml('</' + elem.tagName.toLowerCase() + '>');
+      treeStr += '</span>' + '\n';
+    }, this);
+    return treeStr;
+  },
+
+  _escapeHtml: function (string) {
+    var entityMap = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      '\'': '&#39;',
+      '/': '&#x2F;'
+    };
+    return String(string).replace(/[&<>"'\/]/g, function (s) {
+      return entityMap[s];
+    });
+  },
+
+  _getElOpeningTag: function (el) {
+    var str = '<';
+    str += el.tagName.toLowerCase();
+    //get all attribures
+    [].forEach.call(el.attributes, function (elem) {
+      // this.attributes is not a plain object, but an array
+      // of attribute nodes, which contain both the name and value
+      if (elem.specified && elem.name !== 'data-asq-selected') {
+        str += ' ' + elem.name;
+        str += '="' + elem.value + '"';
+      }
+    });
+    str += '>';
+    return str;
+  },
+
+  submit: function () {
+    if (this.role !== this.roles.VIEWER) {
+      return;
+    }
+    if (!this.value) {
+      this.value = '';
+    }
+    submission = this.value.replace(/[\s]+/g, ' ').trim();
+    return {
+      questionUid: this.uid,
+      timestamp: new Date(),
+      submission: submission
+    };
+  },
+
+  _onQuestionType: function (evt) {
+    if (!evt || !evt.questionType)
+      return;
+    if (evt.questionType == 'asq-css-select-q') {
+      if (evt.type == 'progress') {
+        this._onProgress(evt);
+      } else if (evt.type == 'restorePresenter') {
+        this._onRestorePresenter(evt);
+      }
+    }
+  },
+
+  _onRestorePresenter: function (evt) {
+    if ( !evt.questions) return;
+
+    evt.questions.forEach(function(q){
+     if(q.uid != this.uid) return;
+     this._submissions = q.answers;
+    }.bind(this));
+  },
+
+  _onProgress: function (evt) {
+    if (!evt.question || evt.question.uid !== this.uid)
+      return;
+
+    this._submissions = evt.question.answers;
+  },
+
+  _eventBusChanged: function (eventBus) {
+    if(!eventBus) return;
+    eventBus.on('asq:question_type', this._onQuestionType.bind(this));
+  },
+
+  indexPlusOne: function(index){
+    return ++index;
+  }
+});
+</script>
+
