@@ -120,20 +120,23 @@
     _createTree: function (el, treeStr, tabwidth) {
       var nextTabwidth = tabwidth || '';
       Polymer.dom(el).childNodes.forEach(function (elem, index) {
-        var spanOpenTag = '<span>';
-        if (elem.getAttribute('data-asq-selected') === 'true') {
-          spanOpenTag = '<span style="background-color:#fd2343;">';
+        // prevent parsing text nodes 
+        if (elem.tagName) {
+          var spanOpenTag = '<span>';
+          if (elem.getAttribute('data-asq-selected') === 'true') {
+            spanOpenTag = '<span style="background-color:#fd2343;">';
+          }
+          treeStr += tabwidth + spanOpenTag;
+          treeStr += this._escapeHtml(this._getElOpeningTag(elem));
+          treeStr += '</span>' + '\n';
+          //generate tree for children of current
+          nextTabwidth = tabwidth + '  ';
+          treeStr = this._createTree(elem, treeStr, nextTabwidth);
+          //back to current
+          treeStr += tabwidth + spanOpenTag;
+          treeStr += this._escapeHtml('</' + elem.tagName.toLowerCase() + '>');
+          treeStr += '</span>' + '\n';
         }
-        treeStr += tabwidth + spanOpenTag;
-        treeStr += this._escapeHtml(this._getElOpeningTag(elem));
-        treeStr += '</span>' + '\n';
-        //generate tree for children of current
-        nextTabwidth = tabwidth + '  ';
-        treeStr = this._createTree(elem, treeStr, nextTabwidth);
-        //back to current 
-        treeStr += tabwidth + spanOpenTag;
-        treeStr += this._escapeHtml('</' + elem.tagName.toLowerCase() + '>');
-        treeStr += '</span>' + '\n';
       }, this);
       return treeStr;
     },
